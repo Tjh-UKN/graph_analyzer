@@ -1,6 +1,6 @@
 import re
 import logging
-from typing import Tuple, List, Dic
+from typing import Tuple, List, Dict
 from graph_analyzer.graph import GraphNode
 
 
