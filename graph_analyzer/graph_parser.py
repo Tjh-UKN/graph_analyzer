@@ -44,8 +44,7 @@ class Parser:
             series_number = match.group(1)
             variable_name = match.group(2)
             operator_name = match.group(3)
-            unique_name = series_number + '_' + variable_name
-            self.local_dict[series_number] = unique_name
+            self.local_dict[series_number] = variable_name
 
             args_str, end_pos = self.extract_bracket_content(text, match.end() - 1)
 
@@ -67,9 +66,9 @@ class Parser:
 
             node_info = GraphNode(name=variable_name, operator_name=operator_name, var_inputs=inputs + constants, scope=scope, code_info=code_info)
             if subgraph_info:
-                subgraph_info.nodes[unique_name] = node_info
-            if not self.nodes.get(unique_name, None):
-                self.nodes[unique_name] = node_info
+                subgraph_info.nodes[variable_name] = node_info
+            if not self.nodes.get(variable_name, None):
+                self.nodes[variable_name] = node_info
 
             for const in constants:
                 if const not in self.nodes:
@@ -86,13 +85,13 @@ class Parser:
                     input_node = self.nodes.get(input_name, None)
                     if input_node:
                         node_info.predecessors.append(input_name)
-                        input_node.successors.append(unique_name)
+                        input_node.successors.append(variable_name)
                 else:
                     param_node = GraphNode(name=input_var, operator_name="Param", var_inputs=[], has_constant_input=False)
                     if not self.nodes.get(input_var, None):
                         self.nodes[input_var] = param_node
                     node_info.predecessors.append(input_var)
-                    param_node.successors.append(unique_name)
+                    param_node.successors.append(variable_name)
 
     def parse_code_info(self, text: str, start_pos: int, end_pos: int) -> List[str]:
         code_info = []
@@ -101,7 +100,7 @@ class Parser:
         lines = text[start_pos + 1:final_pos].split('\n')
         for line in lines:
             match = code_info_pattern.search(line)
-            if not match and line:
+            if not match:
                 break
             code_info.append(match.group(0))
         return code_info
