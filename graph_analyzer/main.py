@@ -3,14 +3,14 @@ import sys
 import argparse
 from typing import List
 from graph_analyzer.graph_parser import Parser
-from graph_analyzer.bind import bind_code_info_for_data
+from graph_analyzer.bind import bind_code_info_for_data, write_to_csv
 
 
 
 def main():
     parser = argparse.ArgumentParser(description="IR Parser")
     parser.add_argument('--input', type=str, required=True, help="Path to the input file")
-    parser.add_argument('--data', type=str, required=False, default="./", help="Path to data dir")
+    parser.add_argument('--data', type=str, required=False, default=None, help="Path to data dir")
     parser.add_argument('--output', type=str, required=False, default="./", help="Path to data dir")
     args = parser.parse_args()
 
@@ -22,8 +22,9 @@ def main():
     parser.parse(input_text)
 
     nodes = parser.get_nodes()
-    bind_result = bind_code_info_for_data(arg.data, nodes)
-    write_to_csv(bind_result, os.path.join(args.output, "mapping.csv"))
+    if args.data:
+        bind_result = bind_code_info_for_data(arg.data, nodes)
+        write_to_csv(bind_result, os.path.join(args.output, "mapping.csv"))
     # func_graph_output = []
     # node_output = []
 
