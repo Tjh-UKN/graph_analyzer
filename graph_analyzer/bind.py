@@ -20,7 +20,7 @@ def bind_code_info_for_data(input_dir: str, nodes: List[GraphNode]) -> Dict[str,
     for npy_file in npy_files:
         npy_path = os.path.realpath(npy_file)
         basename = os.path.basename(npy_path)
-        node_scope = basename.split(".")[0]
+        node_scope = basename.split(".")[1]
         bind_code = match_dict.get(node_scope, None)
         bind_result[npy_path] = bind_code
     return bind_result
