@@ -1,3 +1,4 @@
+import os
 import re
 import sys
 import argparse
@@ -23,7 +24,7 @@ def main():
 
     nodes = parser.get_nodes()
     if args.data:
-        bind_result = bind_code_info_for_data(arg.data, nodes)
+        bind_result = bind_code_info_for_data(args.data, nodes)
         write_to_csv(bind_result, os.path.join(args.output, "mapping.csv"))
     # func_graph_output = []
     # node_output = []

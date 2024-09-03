@@ -5,10 +5,10 @@ from pathlib import Path
 from graph_analyzer.graph import GraphNode
 
 
-def bind_code_info_for_data(input_dir: str, nodes: List[GraphNode]) -> Dict[str, str]:    
+def bind_code_info_for_data(input_dir: str, nodes: Dict[str, GraphNode]) -> Dict[str, str]:    
     npy_files = find_npy_files(input_dir)
     match_dict = {}
-    for node in nodes:
+    for name, node in nodes.items():
         # 屏蔽子图节点
         if node.is_subgraph:
             continue
